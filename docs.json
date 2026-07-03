@@ -29,6 +29,9 @@
       {
         "product": "API Reference",
         "pages": [
+          "examples/json-examples",
+          "examples/code-snippets",
+          "examples/api-examples",
           "test"
         ]
       }
