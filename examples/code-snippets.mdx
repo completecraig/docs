@@ -1,0 +1,128 @@
+---
+title: "Code Snippets"
+description: "Example code snippets in various languages"
+---
+
+## Bash / Shell
+
+```bash
+# Loop through files in a directory
+for file in ./data/*.json; do
+  echo "Processing $file..."
+  jq '.name' "$file"
+done
+
+# Find and replace across files
+grep -rl "old-endpoint.com" ./src/ | xargs sed -i 's|old-endpoint.com|new-endpoint.com|g'
+```
+
+## Python
+
+```python
+import json
+from datetime import datetime
+from typing import Optional
+
+def fetch_user_data(user_id: str) -> Optional[dict]:
+    """Fetch user data from the API."""
+    url = f"https://api.example.com/users/{user_id}"
+    
+    response = client.get(url)
+    
+    if response.status_code != 200:
+        return None
+    
+    data = response.json()
+    data["fetched_at"] = datetime.now().isoformat()
+    
+    return data
+
+
+# Usage
+user = fetch_user_data("usr_abc123")
+if user:
+    print(f"User: {user['name']} ({user['email']})")
+```
+
+## JavaScript
+
+```javascript
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
+);
+
+async function getProducts(category, { limit = 10, offset = 0 } = {}) {
+  let query = supabase
+    .from('products')
+    .select('*')
+    .range(offset, offset + limit - 1);
+
+  if (category) {
+    query = query.eq('category', category);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error('Error fetching products:', error);
+    return [];
+  }
+
+  return data;
+}
+```
+
+## TypeScript
+
+```typescript
+interface ApiResponse<T> {
+  status: 'success' | 'error';
+  code: number;
+  data: T;
+  meta?: {
+    requestId: string;
+    timestamp: string;
+  };
+}
+
+type Product = {
+  id: string;
+  name: string;
+  price: number;
+  inStock: boolean;
+};
+
+async function getProduct(id: string): Promise<ApiResponse<Product>> {
+  const response = await fetch(`/api/products/${id}`);
+  
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+
+  return response.json();
+}
+```
+
+## SQL
+
+```sql
+-- Get monthly active users
+SELECT
+  DATE_TRUNC('month', created_at) AS month,
+  COUNT(DISTINCT user_id) AS active_users,
+  COUNT(*) AS total_actions
+FROM user_actions
+WHERE created_at >= NOW() - INTERVAL '6 months'
+GROUP BY month
+ORDER BY month DESC;
+
+-- Find duplicate entries
+SELECT
+  email,
+  COUNT(*) AS count
+FROM users
+GROUP BY email
+HAVING COUNT(*) > 1;

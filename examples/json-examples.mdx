@@ -1,0 +1,94 @@
+---
+title: "JSON Examples"
+description: "Example JSON snippets and configurations"
+---
+
+## User Profile JSON
+
+```json
+{
+  "userId": "usr_abc123",
+  "name": "Jane Doe",
+  "email": "jane.doe@example.com",
+  "role": "admin",
+  "preferences": {
+    "theme": "dark",
+    "notifications": {
+      "email": true,
+      "push": false,
+      "inApp": true
+    }
+  },
+  "createdAt": "2025-01-15T08:30:00Z",
+  "tags": ["enterprise", "beta"]
+}
+```
+
+## API Response Format
+
+```json
+{
+  "status": "success",
+  "code": 200,
+  "data": {
+    "id": "prod_98765",
+    "name": "Widget Pro",
+    "price": 29.99,
+    "currency": "USD",
+    "inStock": true,
+    "dimensions": {
+      "width": 10,
+      "height": 5,
+      "depth": 3
+    }
+  },
+  "meta": {
+    "requestId": "req_xyz789",
+    "timestamp": "2025-06-15T14:22:10Z"
+  }
+}
+```
+
+## Configuration File
+
+```json
+{
+  "app": {
+    "name": "MyApp",
+    "version": "2.1.0",
+    "debug": false
+  },
+  "database": {
+    "host": "localhost",
+    "port": 5432,
+    "name": "myapp_db",
+    "poolSize": 10
+  },
+  "logging": {
+    "level": "info",
+    "format": "json",
+    "output": "stdout"
+  }
+}
+```
+
+## YAML Equivalent
+
+For comparison, here is the same configuration in YAML:
+
+```yaml
+app:
+  name: MyApp
+  version: 2.1.0
+  debug: false
+
+database:
+  host: localhost
+  port: 5432
+  name: myapp_db
+  poolSize: 10
+
+logging:
+  level: info
+  format: json
+  output: stdout

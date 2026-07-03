@@ -1,0 +1,150 @@
+---
+title: "API Examples"
+description: "Example API documentation with request/response samples"
+---
+
+## List Users
+
+Retrieve a paginated list of users.
+
+### Request
+
+```bash
+curl --request GET \
+  --url 'https://api.example.com/v1/users?page=1&limit=20' \
+  --header 'Authorization: Bearer YOUR_API_TOKEN' \
+  --header 'Accept: application/json'
+```
+
+### Response
+
+```json
+{
+  "status": "success",
+  "data": [
+    {
+      "id": "usr_001",
+      "name": "Alice Johnson",
+      "email": "alice@example.com",
+      "role": "editor",
+      "createdAt": "2025-03-10T09:15:00Z"
+    },
+    {
+      "id": "usr_002",
+      "name": "Bob Smith",
+      "email": "bob@example.com",
+      "role": "viewer",
+      "createdAt": "2025-04-22T14:30:00Z"
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "limit": 20,
+    "total": 142,
+    "totalPages": 8
+  }
+}
+```
+
+## Create User
+
+Create a new user in the system.
+
+### Request
+
+```bash
+curl --request POST \
+  --url https://api.example.com/v1/users \
+  --header 'Authorization: Bearer YOUR_API_TOKEN' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "name": "Carol Williams",
+    "email": "carol@example.com",
+    "role": "editor"
+  }'
+```
+
+### Response
+
+```json
+{
+  "status": "success",
+  "code": 201,
+  "data": {
+    "id": "usr_003",
+    "name": "Carol Williams",
+    "email": "carol@example.com",
+    "role": "editor",
+    "createdAt": "2025-07-03T13:24:35Z"
+  }
+}
+```
+
+## Error Responses
+
+### Validation Error
+
+```json
+{
+  "status": "error",
+  "code": 422,
+  "error": {
+    "type": "validation_error",
+    "message": "The request body contains invalid fields.",
+    "details": [
+      {
+        "field": "email",
+        "message": "Must be a valid email address",
+        "code": "invalid_format"
+      },
+      {
+        "field": "role",
+        "message": "Must be one of: admin, editor, viewer",
+        "code": "invalid_enum"
+      }
+    ]
+  },
+  "meta": {
+    "requestId": "req_err_456"
+  }
+}
+```
+
+### Authentication Error
+
+```json
+{
+  "status": "error",
+  "code": 401,
+  "error": {
+    "type": "authentication_error",
+    "message": "Invalid or expired API token.",
+    "code": "token_expired"
+  },
+  "meta": {
+    "requestId": "req_err_789"
+  }
+}
+```
+
+## Rate Limiting
+
+The API enforces rate limiting per token. Limits are reset hourly.
+
+| Limit Type | Requests | Window |
+|---|---|---|
+| Standard | 1,000 | 1 hour |
+| Enterprise | 10,000 | 1 hour |
+
+When rate limited, the API returns a `429` status code:
+
+```json
+{
+  "status": "error",
+  "code": 429,
+  "error": {
+    "type": "rate_limit_error",
+    "message": "Rate limit exceeded. Try again in 34 minutes.",
+    "retryAfter": 2040
+  }
+}
